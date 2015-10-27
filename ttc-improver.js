@@ -11,7 +11,7 @@
 // @include https://translate.twitter.com/*
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @released 2014-05-21
-// @updated 2015-10-23
+// @updated 2015-10-27
 // @copyright 2014+,insideRobb
 // @grant none
 // ==/UserScript==

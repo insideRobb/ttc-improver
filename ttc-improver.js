@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name TTC Improver
 // @namespace https://translate.twitter.com/
-// @version 1.4.8
+// @version 1.4.9
 // @author @insideRobb
 // @description Improve your UX on Twitter Translation Center
 // @website http://robb.be/download/
@@ -11,7 +11,7 @@
 // @include https://translate.twitter.com/*
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @released 2014-05-21
-// @updated 2015-10-27
+// @updated 2015-11-22
 // @copyright 2014+,insideRobb
 // @grant none
 // ==/UserScript==
@@ -74,8 +74,8 @@ function TranslateTwitterAdapt() {
             if (isNaN(improvervalue)) {
                 improvervalue = document.querySelectorAll("#improverdata .translation-timeline li").length;
             }
-            jqttci('.stats a:nth-of-type(' + ttcicountnum + ') .stat-value').text(improvervalue);
-            sessionStorage.setItem(ttcicountstorage + '_' + getusername, improvervalue);
+            jqttci('.stats a:nth-of-type(' + ttcicountnum + ') .stat-value').text(new Intl.NumberFormat('en-EN').format(improvervalue));
+            sessionStorage.setItem(ttcicountstorage + '_' + getusername, new Intl.NumberFormat('en-EN').format(improvervalue));
         });
     }
     function lastprofileac(username, where) {
@@ -261,7 +261,7 @@ function TranslateTwitterAdapt() {
                 jqttci("#q").addClass("form-control");
                 jqttci("#q").css("margin-top", "7px").css("width", "90%");
                 jqttci("#phrase-search-submit").css("height", "30px").css("padding-top", "4px").css("margin-top", "0px");
-                jqttci("#search-form .input-group").prepend('<div class="modal fade" id="searchOperators" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Search Operators</h4></div><div class="modal-body" style="font-size: 14px; color: #555"><ul><li><b>intranslation: </b>Search for terms in translations instead of source content</li><li><b>tag: </b>Search for phrases tagged with the specified tag</li><li><b>notag: </b>Search for phrases tagged without any tag</li><li><b>url: </b>Search for phrases that have a URL that contains the term specified</li><li><b>nourl: </b>Search for phrases without any URL</li><li><b>comment: </b>Search for phrases that have a note that contains the term specified</li><li><b>nocomment: </b>Search for phrases without any note</li><li><b>meta_key: </b>Search for phrases by meta key</li><li><b>global: </b>Search across all projects</li><li><b>verbatim: </b>Search for exact matches</li></ul><a href="/forum/forums/useful-guidelines/topics/7675">Learn more</a></div></div></div></div><button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#searchOperators" style="margin-right: 5px"><i class="glyphicon glyphicon-info-sign"></i></button><div style="margin-right: 5px" class="btn-group"><button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operators <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#">intranslation:</a></li><li><a href="#">tag:</a></li><li><a href="#">notag:</a></li><li><a href="#">url:</a></li><li><a href="#">nourl:</a></li><li><a href="#">comment:</a></li><li><a href="#">nocoment:</a></li><li><a href="#">meta_key:</a></li><li><a href="#">global:</a></li><li><a href="#">verbatim:</a></li><li><a href="#">global:verbatim:</a></li></ul></div>');
+                jqttci("#search-form .input-group").prepend('<style>#search-form .input-group-btn {top: 19px; right: 23px;}</style><div class="modal fade" id="searchOperators" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Search Operators</h4></div><div class="modal-body" style="font-size: 14px; color: #555"><ul><li><b>intranslation: </b>Search for terms in translations instead of source content</li><li><b>tag: </b>Search for phrases tagged with the specified tag</li><li><b>notag: </b>Search for phrases tagged without any tag</li><li><b>url: </b>Search for phrases that have a URL that contains the term specified</li><li><b>nourl: </b>Search for phrases without any URL</li><li><b>comment: </b>Search for phrases that have a note that contains the term specified</li><li><b>nocomment: </b>Search for phrases without any note</li><li><b>meta_key: </b>Search for phrases by meta key</li><li><b>global: </b>Search across all projects</li><li><b>verbatim: </b>Search for exact matches</li></ul><a href="/forum/forums/useful-guidelines/topics/7675">Learn more</a></div></div></div></div><button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#searchOperators" style="margin-right: 5px"><i class="glyphicon glyphicon-info-sign"></i></button><div style="margin-right: 5px" class="btn-group"><button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operators <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#">intranslation:</a></li><li><a href="#">tag:</a></li><li><a href="#">notag:</a></li><li><a href="#">url:</a></li><li><a href="#">nourl:</a></li><li><a href="#">comment:</a></li><li><a href="#">nocoment:</a></li><li><a href="#">meta_key:</a></li><li><a href="#">global:</a></li><li><a href="#">verbatim:</a></li><li><a href="#">global:verbatim:</a></li></ul></div>');
                 jqttci("#search-form ul a").click(function() {
                     jqttci("#q").focus().val(jqttci(this).text());
                 });
@@ -284,7 +284,7 @@ function TranslateTwitterAdapt() {
         }
         //Forum buttons
         if(jqttci("#new_topic").length||jqttci("#new_post").length||jqttci(".edit_post").length) {
-            jqttci("textarea.text").before('<style>.body-forem-posts .container > h2, .body-forem-posts .topic_subject {display: inline-block} .body-forem-posts .topic_subject:before {content: open-quote} .body-forem-posts .topic_subject:after {content: close-quote}</style><div class="btn-group formatter" role="group"><a href="#" class="btn btn-default" style="font-style: italic">i</a><a class="btn btn-default" style="font-weight: bold">b</a><a class="btn btn-default">Link</a><a class="btn btn-default">List item</a><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Header<span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" title="#">H1</a></li><li><a href="#" title="##">H2</a></li><li><a href="#" title="###">H3</a></li><li><a href="#" title="####">H4</a></li><li><a href="#" title="#####">H5</a></li><li><a href="#" title="######">H6</a></li></ul></div></div><br><br>');      
+            jqttci("textarea.text").before('<style>.body-forem-posts .container > h2, .body-forem-posts .topic_subject {display: inline-block} .formatter {display: block} .body-forem-posts .topic_subject:before {content: open-quote} .body-forem-posts .topic_subject:after {content: close-quote}</style><div class="btn-group formatter" role="group"><a href="#" class="btn btn-default" style="font-style: italic">i</a><a class="btn btn-default" style="font-weight: bold">b</a><a class="btn btn-default">Link</a><a class="btn btn-default">List item</a><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Header<span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" title="#">H1</a></li><li><a href="#" title="##">H2</a></li><li><a href="#" title="###">H3</a></li><li><a href="#" title="####">H4</a></li><li><a href="#" title="#####">H5</a></li><li><a href="#" title="######">H6</a></li></ul></div></div><br><br>');      
             jqttci(".formatter > a:first-child").click(function() {
                 forumdashboard("*");
             });
@@ -304,7 +304,7 @@ function TranslateTwitterAdapt() {
 
         //Icons
 
-        if((jqttci(".clearfix .pull-right a[href='/translate']").length > 0)||(document.URL == "https://translate.twitter.com/translate")) {   
+        if(document.URL == "https://translate.twitter.com/translate") {   
             var icons = [];
             icons.push(["about-twitter", "https://pbs.twimg.com/media/BoG1a6LCIAA5Cb-.png"]);
             icons.push(["amplify-player", "https://pbs.twimg.com/media/BqphXRdIgAEptHd.png"]);
@@ -341,31 +341,15 @@ function TranslateTwitterAdapt() {
             icons.push(["jobs", "https://pbs.twimg.com/media/BoG1gRaCQAAPzMo.png"]);
             icons.push(["glossary_project_test_onl", "https://pbs.twimg.com/media/BvUJyqsCMAAer5k.png"]);
 
-            if (document.URL == "https://translate.twitter.com/translate") {
-                jqttci('head').append('<style type="text/css">.dashboard-center .table a img {background-image: none}</style>');
-                for(i = 0; i < icons.length; i++) {
-                    jqttci('.dashboard-center .table a[href="/' + icons[i][0] + '/pending"] img').prop('src', icons[i][1]);
-                }
-                jqttci("#improverdata").load("/user/" + currentusername + " .stats div.stat > .stat-value", function() {
-                    var helldashdiv = document.querySelectorAll(".dashboard-sidebar .dashboard-sidebar-divider")[1];
-                    helldashdiv.insertAdjacentHTML('beforebegin', '<div class="height10"></div><div class="clearfix"><strong class="stat-value">' + jqttci("#improverdata").text().replace(',','') + '</strong><div class="stat-name text-muted">KARMA POINTS</div></div>');
-                });
+            jqttci('head').append('<style type="text/css">#list .metadata img {float: left; margin-right: 7px; margin-top: -3px}</style>');
+            for(i = 0; i < icons.length; i++) {
+                jqttci('#list a[href="/' + icons[i][0] + '/pending"] .metadata').prepend('<img src="' + icons[i][1] + '">');
             }
-            else {
-                jqttci('head').append('<style type="text/css">#projectsDropdownMenu .pull-left img {background-image: none}</style>');
-                for(i = 0; i < icons.length; i++) {
-                    if (document.URL == "https://translate.twitter.com/" + icons[i][0]) {
-                        jqttci('#projectsDropdownMenu .pull-left img').prop('src', icons[i][1]);
-                        i = icons.length;
-                    }
-                }
-            }
+
         }
 
         //Profiles
         if ((window.location.href.indexOf("https://translate.twitter.com/user/") != -1) && (jqttci(".profile-name").length) && (jqttci("#oauth-connect").length === 0)) {
-            jqttci('.stats a[href$="votes_for"] .stat-value').html(jqttci('.stats a[href$="votes_for"] .stat-value').text().replace(',',''));
-            jqttci('.stats > div .stat-value').html(jqttci('.stats > div .stat-value').text().replace(',',''));
             var getusername = jqttci('.profile-user').attr('data-user-login');
             jqttci('.stats a:not(a[href$="/votes_for"]) .stat-value').text('Loading');
             cache(getusername);
@@ -394,7 +378,7 @@ function TranslateTwitterAdapt() {
                     levelbadge.attr("src", "https://pbs.twimg.com/media/BvUK-7nCQAAp44F.png");
                     levelname.text("Vendor");
                     leveldescription.html("Professional translator employed by Twitter; <a href='https://translate.twitter.com/forum/forums/indonesian/topics/6269#post-39296'>learn more</a>");
-                } else if (/(conradoldcorn|Kavelicious|unbirthdaytea|b_eimon|monica|bigloser|jakl|nrjeon|DayvieO|haru703|OkidoKim|winfield|constantly|tarmstrong|NLPenguin|edeng|twitter_kr|candacec|MelikeSF|KL7|JasonYZhao|laupezza|imjohnwalsh|sprigoda|alolita|tm|gargi_hazra|FrancescaDM|gianna|jiangts|sunnyjiangsj|mrkyten)/.test(getusername)) {
+                } else if (/(conradoldcorn|Kavelicious|unbirthdaytea|monica|nrjeon|DayvieO|OkidoKim|winfield|constantly|tarmstrong|NLPenguin|edeng|twitter_kr|candacec|MelikeSF|KL7|JasonYZhao|laupezza|imjohnwalsh|sprigoda|alolita|tm|gargi_hazra|FrancescaDM|gianna|sunnyjiangsj|mrkyten)/.test(getusername)) {
                     levelbadge.attr("src", "https://pbs.twimg.com/media/BvhcfnZIcAQQsOQ.png");
                     levelname.text("Localizer");
                     leveldescription.html("Member of Twitter <a href='https://twitter.com/localizers'>Localization</a> Team");
@@ -403,7 +387,7 @@ function TranslateTwitterAdapt() {
         }
 
         if(jqttci(".body-dashboard-homepage").length) {
-            jqttci("head").append('<style type="text/css">.dashboard-center-list-header {font-size: 24px; line-height: 19px} .dashboar-user-rank .volunteer-since {font-size: 13px} .dashboard-list-item-left.adjacent-to-avatar {width: auto} .dashboard-activity-list .adjacent-to-avatar {width: 70%}</style>');
+            jqttci("head").append('<style type="text/css">.dashboard-center-list-header {font-size: 24px; line-height: 19px} .dashboar-user-rank .volunteer-since {font-size: 13px} .dashboard-list-item-left.adjacent-to-avatar {width: auto} .dashboard-activity-list .adjacent-to-avatar {width: 70%} .moderatorsdash .dashboard-activity-info h4 {word-break: break-word}</style>');
 
             cache('feedback');
             if (cache('feedback') === false) {

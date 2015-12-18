@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name TTC Improver
 // @namespace https://translate.twitter.com/
-// @version 1.4.9
+// @version 1.5.5
 // @author @insideRobb
 // @description Improve your UX on Twitter Translation Center
 // @website http://robb.be/download/
@@ -11,7 +11,7 @@
 // @include https://translate.twitter.com/*
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @released 2014-05-21
-// @updated 2015-11-22
+// @updated 2015-12-16
 // @copyright 2014+,insideRobb
 // @grant none
 // ==/UserScript==
@@ -143,7 +143,6 @@ function TranslateTwitterAdapt() {
     }
     function buildfavsdash() {
         if (localStorage.getItem("ttcifavorites") === null) {
-            var toptranslators;
             if(ttcilanguage == "Afrikaans") {toptranslators = ["GalauBang3t","haserkopf"];}
             else if(ttcilanguage == "Albanian") {toptranslators = ["bujartafili","genc_ks"];}
             else if(ttcilanguage == "Arabic") {toptranslators = ["MustafaFaour"];}
@@ -151,8 +150,8 @@ function TranslateTwitterAdapt() {
             else if(ttcilanguage == "Belarusian") {toptranslators = ["Juschtell","00ZE"];}
             else if(ttcilanguage == "Bengali") {toptranslators = ["UdiptoRoy","gargi_hazra"];}
             else if(ttcilanguage == "Bulgarian") {toptranslators = ["peter_sl"];}
-            else if(ttcilanguage == "Catalan") {toptranslators = ["no_hi_soc_tot"];}
-            else if(ttcilanguage == "Croatian") {toptranslators = ["Peter_Dinu_","danasamaloglup"];}
+            else if(ttcilanguage == "Catalan") {toptranslators = ["jpgine"];}
+            else if(ttcilanguage == "Croatian") {toptranslators = ["AnaMisin","danasamaloglup"];}
             else if(ttcilanguage == "Czech") {toptranslators = ["verzus","themarketka"];}
             else if(ttcilanguage == "Danish") {toptranslators = ["helleras"];}
             else if(ttcilanguage == "Dutch") {toptranslators = ["LeonWetzel"];}
@@ -178,14 +177,14 @@ function TranslateTwitterAdapt() {
             else if(ttcilanguage == "Latin") {toptranslators = ["LatinTranslate_"];} // 1 missing
             else if(ttcilanguage == "Latvian") {toptranslators = ["knifeless333","edzuslv"];}
             else if(ttcilanguage == "Malay") {toptranslators = ["aztazhr"];}
-            else if(ttcilanguage == "Norwegian") {toptranslators = ["RockThatClock"];}
+            else if(ttcilanguage == "Norwegian") {toptranslators = ["cabergen"];}
             else if(ttcilanguage == "Polish") {toptranslators = ["sylwiabesz"];}
             else if(ttcilanguage == "portuguese-brazil") {toptranslators = ["sukigu_","OlaKiridinha"];}
             else if(ttcilanguage == "Romanian") {toptranslators = ["TheGelu","oviung"];}
             else if(ttcilanguage == "Russian") {toptranslators = ["AlexAdvert","sprigoda"];}
-            else if(ttcilanguage == "Serbian") {toptranslators = ["acko_aa"];}
+            else if(ttcilanguage == "Serbian") {toptranslators = ["boacvetkovic"];}
             else if(ttcilanguage == "simplified-chinese") {toptranslators = ["ifansonia","sunnyjiangsj"];}
-            else if(ttcilanguage == "Slovak") {toptranslators = ["matiqos"];}
+            else if(ttcilanguage == "Slovak") {toptranslators = ["AlesCule"];}
             else if(ttcilanguage == "Spanish") {toptranslators = ["mathiascupito","monica"];}
             else if(ttcilanguage == "Swedish") {toptranslators = ["nedemekpembe"];}
             else if(ttcilanguage == "Tamil") {toptranslators = ["vijayasankar91","hari_vel"];}
@@ -282,6 +281,34 @@ function TranslateTwitterAdapt() {
                 }
             }
         }
+
+        //New content in forums
+        if((document.URL == "https://translate.twitter.com/forum")||(document.URL == "https://translate.twitter.com/forum/")) {
+            jqttci("head").append('<style type="text/css">.forum.hotnew a {text-shadow: 0px 0px 0px #000} .forum.odd.hotnew td {background-color: #78c2ed} .forum.even.hotnew td {background-color: #b3d9ef} .forum.hotnew time {color: #FFF}</style>');
+            lastposts = document.querySelectorAll(".last_post");
+            lastpostsdata = [];
+            for(i = 0; i < lastposts.length; i++) {
+                lastpostlink = lastposts[i].querySelector("a").getAttribute("href");
+                lastposttime = lastposts[i].querySelector("time").getAttribute("datetime");
+                // 0 1 - unread read
+                if((lastposttime != JSON.parse(localStorage["lastpostsdata"])[i][1])&&(JSON.parse(localStorage["lastpostsdata"])[i][2] != 1)) {
+                    lastposts[i].parentElement.parentElement.className+= " hotnew";
+                }
+                lastpostsdata.push([lastpostlink, lastposttime, 0]);
+            }
+            localStorage["lastpostsdata"] = JSON.stringify(lastpostsdata);
+        }
+        if(jqttci(".body-forem-topics").length > 0) {
+            lastpostsdata = JSON.parse(localStorage["lastpostsdata"]);
+            for(i = 0; i < lastpostsdata.length; i++) {
+                if(document.location.pathname == lastpostsdata[i][0]) {
+                    lastpostsdata[i][2] = 1;
+                    localStorage["lastpostsdata"] = JSON.stringify(lastpostsdata);
+                    i = lastpostsdata.length;
+                }
+            }
+        }
+
         //Forum buttons
         if(jqttci("#new_topic").length||jqttci("#new_post").length||jqttci(".edit_post").length) {
             jqttci("textarea.text").before('<style>.body-forem-posts .container > h2, .body-forem-posts .topic_subject {display: inline-block} .formatter {display: block} .body-forem-posts .topic_subject:before {content: open-quote} .body-forem-posts .topic_subject:after {content: close-quote}</style><div class="btn-group formatter" role="group"><a href="#" class="btn btn-default" style="font-style: italic">i</a><a class="btn btn-default" style="font-weight: bold">b</a><a class="btn btn-default">Link</a><a class="btn btn-default">List item</a><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Header<span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" title="#">H1</a></li><li><a href="#" title="##">H2</a></li><li><a href="#" title="###">H3</a></li><li><a href="#" title="####">H4</a></li><li><a href="#" title="#####">H5</a></li><li><a href="#" title="######">H6</a></li></ul></div></div><br><br>');      
@@ -306,44 +333,69 @@ function TranslateTwitterAdapt() {
 
         if(document.URL == "https://translate.twitter.com/translate") {   
             var icons = [];
-            icons.push(["about-twitter", "https://pbs.twimg.com/media/BoG1a6LCIAA5Cb-.png"]);
-            icons.push(["amplify-player", "https://pbs.twimg.com/media/BqphXRdIgAEptHd.png"]);
-            icons.push(["cards", "https://pbs.twimg.com/media/BoG0lHfCIAAqIRG.png"]);
-            icons.push(["emails", "https://pbs.twimg.com/media/BoG0lHTCEAEzcRl.png"]);
-            icons.push(["microsites", "https://pbs.twimg.com/media/BoG0lHgCAAAT9hr.png"]);
-            icons.push(["m2", "https://pbs.twimg.com/media/B_qaW0GXAAAKgCM.png"]);
-            icons.push(["responsive-web", "https://pbs.twimg.com/media/BoG0yF1CIAA9DjY.png"]);
-            icons.push(["sms", "https://pbs.twimg.com/media/BoG0yHtCUAAOEUE.png"]);
-            icons.push(["periscope-android", "https://pbs.twimg.com/media/CH5NC8MUwAA7FqH.png"]);
-            icons.push(["periscope-ios", "https://pbs.twimg.com/media/CH5NC8OUcAA6r3T.png"]);
-            icons.push(["periscope-web", "https://pbs.twimg.com/media/CH5NC8QUkAAi31H.png"]);
-            icons.push(["platform", "https://pbs.twimg.com/media/BoG0yIACUAA4IGU.png"]);
-            icons.push(["support-twitter", "https://pbs.twimg.com/media/BoG1gQuCcAAku84.png"]);
-            icons.push(["transparency-twitter", "https://pbs.twimg.com/media/B_qbejqWYAADSIo.png"]);
-            icons.push(["tweetdeck", "https://pbs.twimg.com/media/BoG1a5yCAAA9Kag.png"]);
-            icons.push(["twitter-dev-android", "https://pbs.twimg.com/media/B7JjGVqIEAAS5yD.png"]);
-            icons.push(["twitter-dev-ios", "https://pbs.twimg.com/media/B7pGLyVCQAA6Q50.png"]);
-            icons.push(["twitter-dev-web", "https://pbs.twimg.com/media/B_qbemAWcAAMmw8.png"]);
-            icons.push(["android", "https://pbs.twimg.com/media/BoG1a6tCIAAv--A.png"]);
-            icons.push(["twitter-iphone", "https://pbs.twimg.com/media/BoG1a6fCMAAWti3.png"]);
-            icons.push(["twitter-mac", "https://pbs.twimg.com/media/B_qaWz6WwAAWBNC.png"]);
-            icons.push(["twitter-windowsphone", "https://pbs.twimg.com/media/BoG1gPRCQAAr0yP.png"]);
-            icons.push(["twitter-mirror-ios", "https://pbs.twimg.com/media/BoG1lRNCEAAb30K.png"]);
-            icons.push(["twitter-music", "https://pbs.twimg.com/media/BoG1lVLCIAAvPpq.png"]);
-            icons.push(["twitter", "https://pbs.twimg.com/media/BoG1lWuCcAAeX0B.png"]);
-            icons.push(["VineAPI", "https://pbs.twimg.com/media/BoG1lW_CMAAsyu3.png"]);
-            icons.push(["vine-android", "https://pbs.twimg.com/media/BoG1si6CYAAd_mh.png"]);
-            icons.push(["vine-ios", "https://pbs.twimg.com/media/BoG1ssCCEAAn-Jh.png"]);
-            icons.push(["vine-windowsphone", "https://pbs.twimg.com/media/BoG1ssiCQAE9MZ8.png"]);
-            icons.push(["glossary_project", "https://pbs.twimg.com/media/BvUJyqsCMAAer5k.png"]);
-            icons.push(["twitter-ads", "https://pbs.twimg.com/media/BoPW3gyIUAAxJ--.png"]);
-            icons.push(["dev-twitter", "https://pbs.twimg.com/media/B_qbemuWEAAZIk_.png"]);
-            icons.push(["jobs", "https://pbs.twimg.com/media/BoG1gRaCQAAPzMo.png"]);
-            icons.push(["glossary_project_test_onl", "https://pbs.twimg.com/media/BvUJyqsCMAAer5k.png"]);
+            icons.push(["about-twitter", "https://pbs.twimg.com/media/CWHjEN7VAAA7Eme.png"]);
+            icons.push(["amplify-player", "https://pbs.twimg.com/media/CWHjEP3UkAAi_KN.png"]);
+            icons.push(["periscope-ios", "https://pbs.twimg.com/media/CWHjEQYUYAEmyu6.png"]);
+            icons.push(["biz-twitter", "https://pbs.twimg.com/media/CWHjEQOVEAAOunf.png"]);
+            icons.push(["periscope-web", "https://pbs.twimg.com/media/CWHjn2RUkAE6hs4.png"]);
+            icons.push(["business-twitter", "https://pbs.twimg.com/media/CWHjn2YUYAARzyZ.png"]);
+            icons.push(["prompts", "https://pbs.twimg.com/media/CWHjn2eUEAEsibN.png"]);
+            icons.push(["cards", "https://pbs.twimg.com/media/CWHjn2lVAAEHKAt.png"]);
+            icons.push(["support-twitter", "https://pbs.twimg.com/media/CWHkgKBU8AAiCSl.png"]);
+            icons.push(["platform", "https://pbs.twimg.com/media/CWHkgKCUsAIFiOr.png"]);
+            icons.push(["dev-twitter", "https://pbs.twimg.com/media/CWHkgKHUsAA9cY0.png"]);
+            icons.push(["transparency-twitter", "https://pbs.twimg.com/media/CWHkgKQUkAAW5Rl.png"]);
+            icons.push(["twitter-dev-web", "https://pbs.twimg.com/media/CWHlk1HUEAEjddF.png"]);
+            icons.push(["Trash", "https://pbs.twimg.com/media/CWHlk1RVEAAwC0B.png"]);
+            icons.push(["discover", "https://pbs.twimg.com/media/CWHmNB9VEAA0LdJ.png"]);
+            icons.push(["twitter-ads", "https://pbs.twimg.com/media/CWHlk1WUEAEhFQo.png"]);
+            icons.push(["emails", "https://pbs.twimg.com/media/CWHlk1XU8AANx5T.png"]);
+            icons.push(["twitter-blogs", "https://pbs.twimg.com/media/CWHmNCAUsAA4qfV.png"]);
+            icons.push(["android", "https://pbs.twimg.com/media/CWHmNCDU4AADmtK.png"]);
+            icons.push(["glossary_project_test_onl", "https://pbs.twimg.com/media/CWHmNFJU8AAIgYE.png"]);
+            icons.push(["twitter-iphone", "https://pbs.twimg.com/media/CWHm2FbVEAIxs9N.png"]);
+            icons.push(["twitter-mac", "https://pbs.twimg.com/media/CWHm2FhUkAIVHlg.png"]);
+            icons.push(["twitter-windows", "https://pbs.twimg.com/media/CWHm2FjU4AEuu_h.png"]);
+            icons.push(["twitter-windowsphone", "https://pbs.twimg.com/media/CWHm2FjU4AEuu_h.png"]);
+            icons.push(["interest-topics", "https://pbs.twimg.com/media/CWHm2FpUwAABeCm.png"]);
+            icons.push(["twitter-mirror-ios", "https://pbs.twimg.com/media/CWHnNtcUYAA2Bvr.png"]);
+            icons.push(["twitter-video", "https://pbs.twimg.com/media/CWHnNtkUAAAbEER.png"]);
+            icons.push(["microsites", "https://pbs.twimg.com/media/CWHnNtwUkAIFo1G.png"]);
+            icons.push(["twitter", "https://pbs.twimg.com/media/CWHnNtwUkAECMDy.png"]);
+            icons.push(["m2", "https://pbs.twimg.com/media/CWHnnOgVAAEQ8AM.png"]);
+            icons.push(["twitter-dev-android", "https://pbs.twimg.com/media/CWHnnOmVAAAsTEh.png"]);
+            icons.push(["twitter-dev-ios", "https://pbs.twimg.com/media/CWHnnOxU4AAgMl6.png"]);
+            icons.push(["vine-ios", "https://pbs.twimg.com/media/CWHnnOxVEAAUoVs.png"]);
+            icons.push(["vine-windowsphone", "https://pbs.twimg.com/media/CWHoA5hU8AApla2.png"]);
+            icons.push(["responsive-web", "https://pbs.twimg.com/media/CWHoA5lVEAAsdNj.png"]);
+            icons.push(["sms", "https://pbs.twimg.com/media/CWHoA5oU4AAFAOu.png"]);
+            icons.push(["VineAPI", "https://pbs.twimg.com/media/CWHoA5uUYAAtVAl.png"]);
+            icons.push(["periscope-android", "https://pbs.twimg.com/media/CWHocQ5UAAEMYZA.png"]);
+            icons.push(["vine-android", "https://pbs.twimg.com/media/CWHocQEUEAA9hmr.png"]);
+            icons.push(["tweetdeck", "https://pbs.twimg.com/media/CWHocURUYAAXUFZ.png"]);
+            icons.push(["twitter-music", "https://pbs.twimg.com/media/CWHocUUUwAADnQ3.png"]);
+            icons.push(["jobs", "https://pbs.twimg.com/media/CWHo4fFUYAA5-5P.png"]);
+            icons.push(["twitter-media", "https://pbs.twimg.com/media/CWHo4fFUkAAOjgv.png"]);
+            icons.push(["periscope-tv", "https://pbs.twimg.com/media/CWIRihJWIAEfXF8.png"]);
+            icons.push(["mobile-release-notes", "https://pbs.twimg.com/media/CWIRifFWcAA5auS.png"]);
 
-            jqttci('head').append('<style type="text/css">#list .metadata img {float: left; margin-right: 7px; margin-top: -3px}</style>');
+            jqttci('head').append('<style type="text/css">#list .metadata img {float: left; margin-right: 7px; margin-top: -3px} .blank {visibility: hidden}</style>');
+            jqttci('#list a .metadata').has(".name:first-child").prepend('<img src="https://pbs.twimg.com/media/CWHjEN7VAAA7Eme.png" class="blank" width="50" height="50">');
+            if(/pending$/.test(document.querySelector("#list a").href)) {
+                linkspending = true;
+            }
+            else {
+                linkspending = false;
+            }
             for(i = 0; i < icons.length; i++) {
-                jqttci('#list a[href="/' + icons[i][0] + '/pending"] .metadata').prepend('<img src="' + icons[i][1] + '">');
+                if(linkspending == true) {
+                    jqttci('#list a[href="/' + icons[i][0] + '/pending"] .metadata img').attr('src', icons[i][1]);
+                    jqttci('#list a[href="/' + icons[i][0] + '/pending"] .metadata img').removeClass('blank');
+                }
+                else {
+                    jqttci('#list a[href="/' + icons[i][0] + '"] .metadata img').attr('src', icons[i][1]);
+                    jqttci('#list a[href="/' + icons[i][0] + '"] .metadata img').removeClass('blank');
+                }
             }
 
         }
@@ -465,6 +517,7 @@ function TranslateTwitterAdapt() {
             // Favorites activity
 
             if(ttcilanguage != "Lolcat") {
+                var toptranslators;
                 jqttci(".dashboard-center.pull-right:nth-last-child(3)").before('<div class="dashboard-center clearfix pull-right"><div class="dashboard-center-list dashboard-activity-favorites"><h3 class="dashboard-center-list-header clearfix"><a href="#" id="addfavorite">+</a> Favorites activity <small>(<a href="#" class="favoritedelete">clear</a>)</small></h3><div class="dashboard-center-list-body table-layout favoritesdash" style="display: block;"><div class="spinner-loader">Loading…</div></div></div></div>');
                 if (localStorage.getItem("TranslateTwitterAdapt_dashboardstate" + flex_encode(jqttci(".dashboard-activity-favorites").attr("class"))) != "false") {
                     buildfavsdash();
